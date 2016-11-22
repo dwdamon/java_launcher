@@ -50,5 +50,5 @@ of the file must match the name of the class.
 Then run:
 
     % ./helloworld
-    Hello world!
+    Hello, world!
 
