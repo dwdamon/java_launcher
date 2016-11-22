@@ -6,7 +6,9 @@ Helper script to treat Java programs as scripts.
 I prefer camelCase to train_case so I changed the script from java_launcher to javaLauncher.  Personal preference.
 
 Sometimes I'd like to set environment variables that my java app can use.  So I added a handler for:
+
    # export: STRING="Hello, World!"
+
 That exports the values into the current environment.
 
 ## Overview
