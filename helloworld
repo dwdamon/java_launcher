@@ -1,8 +1,11 @@
-#!/usr/bin/env java_launcher
+#!/usr/bin/env javaLauncher
 # vim:ft=java
+# export:STRING1="Goodbye, cruel world!"
+# export:STRING="Hello, world!"
 
 public class helloworld {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-    }
+  public static void main( String[] args ) {
+    System.out.println( System.getenv().get( "STRING" ));
+    System.out.println( System.getenv().get( "STRING1" ));
+  }
 }

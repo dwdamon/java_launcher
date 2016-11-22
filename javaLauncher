@@ -17,7 +17,8 @@
 # Put this script in your path and write the following line at the top of an
 # executable Java source program:
 #
-#   #!/usr/bin/env java_launcher
+# changed java_launcher to javaLauncher (I just prefer camelCase)
+#   #!/usr/bin/env javaLauncher
 #
 # Additional documentation here: https://github.com/lkesteloot/java_launcher
 
@@ -27,7 +28,7 @@ set -e
 # Get the name of the script, which the shell passes to us automatically.
 SOURCE_PATHNAME=$1
 if [ "$SOURCE_PATHNAME" = "" ]; then
-    echo "java_launcher: Must supply name of script as first argument."
+    echo "javaLauncher: Must supply name of script as first argument."
     exit 1
 fi
 
@@ -45,7 +46,8 @@ fi
 SOURCE_FILENAME=$(basename "$SOURCE_PATHNAME")
 SOURCE_DIR=$(dirname "$SOURCE_PATHNAME")
 CLASS_NAME=$(echo $SOURCE_FILENAME | sed -e 's/\.*//')
-CACHE_DIR=$HOME/.java_launcher_cache
+# scrapped '_' and went camelCase below too....
+CACHE_DIR=$HOME/.javaLauncherCache
 CLASS_DIR=$CACHE_DIR/$SUM
 PROCESSED_SOURCE=$CLASS_DIR/${SOURCE_FILENAME}.java
 PROCESSED_CLASS=$CLASS_DIR/${SOURCE_FILENAME}.class
@@ -53,6 +55,9 @@ PROCESSED_CLASS=$CLASS_DIR/${SOURCE_FILENAME}.class
 # Process source to find libs for classpath. Relative jars are made relative to the
 # source file.
 export CLASSPATH=$(awk 'BEGIN { CLASSPATH="" } /^# lib:(.*)$/ { jar = substr($0, 7); if (substr(jar, 1, 1) != "/") jar = SOURCE_DIR "/" jar; if (CLASSPATH != "") CLASSPATH = CLASSPATH ":"; CLASSPATH = CLASSPATH jar } END { print CLASSPATH }' SOURCE_DIR="$SOURCE_DIR" < "$SOURCE_PATHNAME")
+
+export EXPORTS=$(awk 'BEGIN { EXPORTS="" } /^# export:(.*)$/ { theExport = substr($0, 10); if( EXPORTS != "" ) EXPORTS = EXPORTS ";";EXPORTS = EXPORTS "export " theExport } END { print EXPORTS }' SOURCE_DIR="$SOURCE_DIR" < "$SOURCE_PATHNAME")
+eval $EXPORTS
 
 # Default libraries. Put default ones last.
 SCRIPT_DIR=$(dirname $0)
